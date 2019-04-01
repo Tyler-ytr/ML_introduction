@@ -1,5 +1,6 @@
 from numpy import *
 import numpy as np
+import scipy as sci
 import pandas as pd
 import csv
 
@@ -7,6 +8,15 @@ import csv
 def sigmod(Xi, beta):  # y=\frac{1}{1+e^{-\beta^{T}x}},返回的是一个浮点数,仅仅用于训练的时候用
     params = -float(np.dot(Xi, beta.T))
     y = (1.0 / (1.0 + math.exp(params)))
+    return y
+
+
+def sigmod_fit_matrix(X, beta):  # 输入矩阵返回矩阵(数组)
+    params = np.matrix(- np.dot(X, beta.T))
+    # print(params)
+    y = []
+    y = np.matrix((1.0 / (1.0 + np.exp(params))))
+    # print (y)
     return y
 
 
@@ -53,22 +63,32 @@ class LogisticClassfier(object):  # 逻辑回归二分类器
 
         # 梯度下降法
         while True:
-            # old = self.cost_function(Y, self.beta, X_hat)  # 前一个
-            #    print("old", old)
+            if count > 99 * self.loop / 100:
+                print("The time is :", count)
+                old = self.cost_function(Y, self.beta, X_hat)  # 前一个
+                print("old", old)
             temp_sum = np.matrix(np.full(feature_num + 1, 0.5))
-            for i in range(self.m):  # 也许可以优化
-
-                temp_sum += np.array(np.dot(float((sigmod(X_hat[i], self.beta) - Y[i])), X_hat[i]))
+            temp_sum_array = []
+            temp_sum_array.clear()
+            # for i in range(self.m):  # 也许可以优化
+            #
+            #     temp_sum += np.array(np.dot(float((sigmod(X_hat[i], self.beta) - Y[i])), X_hat[i]))
+            # self.beta = self.beta - np.dot(self.alpha / self.m, temp_sum)
+            for i in range(self.m):
+                temp_sum_array.append((sigmod(X_hat[i], self.beta) - Y[i]))
+            temp_sum += np.array(np.dot(temp_sum_array, X_hat))
             self.beta = self.beta - np.dot(self.alpha / self.m, temp_sum)
-            # new = self.cost_function(Y, self.beta, X_hat)  # 更新之后的
-            #  print("new", new)
-
-            # if math.fabs(new - old) < self.accuracy:  # 退出方式1：新旧的cost_function小于accuracy参数,用来防止过拟合
-            #     print("Break in LogisticClassfier")
-            #      print("The value of cost function now is :", new)
-            #      break
-            print("The time is :", count)
-            #   print("The difference between old and new is :", new - old)
+            if count > 99 * self.loop / 100:
+                new = self.cost_function(Y, self.beta, X_hat)  # 更新之后的
+                print("new", new)
+                if math.fabs(new - old) < self.accuracy:  # 退出方式1：新旧的cost_function小于accuracy参数,用来防止过拟合
+                    print("Break in LogisticClassfier")
+                    print("The value of cost function now is :", new)
+                    break
+            if count % 100 == 0:
+                print("The time is :", count)
+            if count > 99 * self.loop / 100:
+                print("The difference between old and new is :", new - old)
             count += 1
             if count >= self.loop:  # 退出方式2：新旧的cost_function小于loop,用来防止出不去
                 print("Break in LogisticClassfier because of loop_num")
@@ -106,7 +126,7 @@ class OVRclassifier(object):
         #  print(temp_y)
         # self.classfier[1]=LogisticClassfier()
         feature_num = X_train.shape[1]
-        for i in range(1, feature_num + 1):
+        for i in range(1, 26 + 1):
             print(i)
             chosen_one = i
             # print(chosen_one)
@@ -114,8 +134,6 @@ class OVRclassifier(object):
             # for j in range(Y_train.shape[0]):
             for j in range(Y_train.shape[0]):
                 if int(Y_train[j]) == chosen_one:
-                    # print("chose", chosen_one)
-                    # print("temp", Y_train[j])
                     temp_y[j] = 1
                 else:
                     # print("chose",chosen_one)
@@ -148,8 +166,9 @@ class OVRclassifier(object):
 def score(my_result, target_result, alpha, loop, accuracy):
     total = my_result.shape[0]
     success = 0
+    # data_params=[alpha,loop,accuracy]
     dataframe = pd.DataFrame({'my_result': list(my_result), 'target': list(target_result)})
-    dataframe.to_csv("result6.csv", index=False, sep=',')
+    dataframe.to_csv("result15.csv", index=False, sep=',')
     print(my_result)
     print(target_result)
     for i in range(total):
@@ -176,12 +195,10 @@ X_test = np.mat(test_value[:, 0:16])  # 保存0-15行数据并转换成矩阵
 Y_test = np.mat(test_value[:, 16:17])  # 保存16行数据并转换成矩阵
 # print("here")
 alpha = 0.05
-loop = 1000
-accuracy = 0.001
+loop = 5000
+accuracy = 0.02
 myOVR = OVRclassifier(alpha, loop, accuracy)
 # print("here1")
 myOVR.OVR_train(X_train, Y_train)
 result = myOVR.OVR_predict(X_test)
 score(result, Y_test, alpha, loop, accuracy)
-# m = X_train.shape[0]
-# n = X_train.shape[1]

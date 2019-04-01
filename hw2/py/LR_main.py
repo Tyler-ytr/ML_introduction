@@ -148,7 +148,8 @@ class OVRclassifier(object):
 def score(my_result, target_result, alpha, loop, accuracy):
     total = my_result.shape[0]
     success = 0
-    dataframe = pd.DataFrame({'my_result': list(my_result), 'target': list(target_result)})
+    data_params=[alpha,loop,accuracy]
+    dataframe = pd.DataFrame({'my_result': list(my_result), 'target': list(target_result),'data_prams':list(data_params)})
     dataframe.to_csv("result6.csv", index=False, sep=',')
     print(my_result)
     print(target_result)

@@ -188,7 +188,44 @@ It can be seen that $d^*$ is a random variable since $\mathbf{x}_i, \forall 1 \l
 \end{problem}
 
 \begin{solution}
+	\begin{enumerate}
+		\item[(1)] \begin{equation}
+		\begin{aligned}
+			Pr(d^* \leq t)	&=P(min_{1\leq i\leq n}(||x_i||\leq t)\\
+										&=1-P(min_{1\leq i\leq n}(||x_i||> t)\\
+										&=1-\Pi_{i=1}^{n}P(||x_i||>t)
+		\end{aligned}			
+		\end{equation}
+		而因为是二维,$P(||x_i||>t)=1-P(||x_i||<t)=1-t^2$
+		\begin{equation}
+			\begin{aligned}
+				Pr(d^* \leq t)	
+											&=1-\Pi_{i=1}^{n}(1-t^2)\\
+											&=1-(1-t^2)^n
+			\end{aligned}			
+			\end{equation}
+	\item[(2)]
+	 由第一问:$Pr(d^* \leq t)=1-\Pi_{i=1}^{n}P(||x_i||>t)$
+\\	而$P(||x_i||>t)=1-P(||x_i||<t)$\\
+对于p维向量x,$P(||x_i||<t)=V_p(t)/V_p(1)=\frac{(t\sqrt{\pi})^p}{(\sqrt{\pi})^p}=t^p$
 
+所以类似的\begin{equation}
+	\begin{aligned}
+		Pr(d^* \leq t)	
+									&=1-\Pi_{i=1}^{n}(1-t^p)\\
+									&=1-(1-t^p)^n
+	\end{aligned}			
+	\end{equation}
+
+\item [(3)]代入计算：\begin{equation}
+\begin{aligned}
+	1-(1-t^p)^n	&=\frac{1}{2}
+	\\t^p&=1-(\frac{1}{2})^{\frac{1}{n}}\\
+	t&=(1-(\frac{1}{2})^{\frac{1}{n}})^{\frac{1}{p}}
+\end{aligned}			
+\end{equation}
+
+	\end{enumerate}
 \end{solution}
 \begin{remark}
 

@@ -3,51 +3,39 @@
 %TC第29.3节练习 5
 %TC第29.4节练习 2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \documentclass[11pt, a4paper, UTF8]{ctexart}
+% \input{preamble}
+% \usepackage{float}
+% \usepackage{amsmath}
+% \usepackage{graphicx}
+% \usepackage{listings}
+% \usepackage{xcolor}
+% \usepackage{enumerate}
 \documentclass[11pt, a4paper, UTF8]{ctexart}
 \input{preamble}
-\usepackage{float}
-\usepackage{indentfirst}
-\usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage{listings}
-\usepackage{xcolor}
+%\usepackage{clrscode3e}
 \usepackage{float}
 \usepackage{enumerate}
-\lstset{
-	numbers=left,
-	numberstyle= \tiny,
-	keywordstyle= \color{ blue!70},
-	commentstyle= \color{red!50!green!50!blue!50},
-	rulesepcolor= \color{ red!20!green!20!blue!20} ,
-	escapeinside=``, % 英文分号中可写入中文
-	xleftmargin=2em,xrightmargin=2em, aboveskip=1em,
-	framexleftmargin=2em
-}
 \title{机器学习导论}
-\me{殷天润}{171240565}
+\author{殷天润}
 \date{\today}
-
 \begin{document}
+
                                                                                                                 
-\noplagiarism
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                       Homework START!                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\beginthishw
 %%%%%%%%%%%%%%%%%%%%
+\section {机器学习导论}
+
+\begin{center} 姓名:殷天润 ~~学号:171240565\end{center}
 \begin{problem}[ML problem 1]
 	[25pts] Kernel Methods
-	
 From Mercer theorem, we know a two variables function $k(\cdot,\cdot)$ is a positive definite kernel function if and only if for any N vectors $x_1,x_2,...,x_N$, their kernel matrix is positive semi-definite. Assume $k_1(\cdot,\cdot)$ and $k_2(\cdot,\cdot)$ are positive definite kernel function for matrices $K_1$ and $K_2$. The element of kernel matrix $K$ is denoted as $K_{ij}=k(x_i,x_j)$. Please proof the kernel function corresponding to the following matrices is positive definite.\\
 (1) [5pts] $K_3=a_1 K_1+a_2 K_2$ where $a_1,a_2>0$;\\
 (2) [10pts] Assume $f(x)=\text{exp}\{-\frac{\|x-\mu\|^2}{2\sigma^2}\}$ where $\mu$ and $\sigma$ are real const. And $K_4$ is defined by $K_4=f(X)^T f(X)$, where $f(X)=[f(x_1),f(x_2),...,f(x_N)]$;\\
 (3) [10pts] $K_5=K_1\cdot K_2$ where '$\cdot$' means Kronecker product.\\
-
-
-
-
-
 \end{problem}
 \begin{solution}
 \begin{enumerate}
@@ -227,11 +215,6 @@ It can be seen that $d^*$ is a random variable since $\mathbf{x}_i, \forall 1 \l
 
 	\end{enumerate}
 \end{solution}
-\begin{remark}
-
-	
-\end{remark}
-
 \begin{problem}[ML problem 4]
 	[25pts] Principal Component Analysis 
 	
@@ -241,9 +224,74 @@ It can be seen that $d^*$ is a random variable since $\mathbf{x}_i, \forall 1 \l
 
 \end{problem}
 \begin{solution}
-  
-\end{solution}
+	\begin{enumerate}
+		\item[(1)]:
+		\begin{enumerate}\item 相同:都是降维的方法,可以把原来的N维数据降成K维;
+			\item 不同:
+		\begin{enumerate} 
+			\item 出发思想不同。PCA主要是从特征的协方差角度，去找到比较好的投影方式，即选择样本点投影具有最大方差的方向;而LDA则更多的是考虑了分类标签信息，寻求投影后不同类别之间数据点距离更大化以及同一类别数据点距离最小化，即选择分类性能最好的方向。
+			\item 降维后可用维度数量不同。LDA降维后最多可生成C-1维子空间（分类标签数-1），因此LDA与原始维度N数量无关，只有数据标签分类数量有关；而PCA最多有n维度可用，即最大可以选择全部可用维度。
+			\item 习模式不同。PCA属于无监督式学习，因此大多场景下只作为数据处理过程的一部分，需要与其他算法结合使用，例如将PCA与聚类、判别分析、回归分析等组合使用；LDA是一种监督式学习方法，本身除了可以降维外，还可以进行预测应用，因此既可以组合其他模型一起使用，也可以独立使用。
 
+		\end{enumerate}
+
+		\end{enumerate}
+		\item[(2)] 每一个点的第一个量,也就是$\{-1,0,1\}$,因为它们“拉”的比较开
+		\item[(3)] \begin{equation}
+			DATA={
+			\left[ \begin{array}{cc}
+			-1 & 1 \\
+			0 & 0 \\
+			1 & 1 
+			\end{array} 
+			\right ]},
+			\end{equation}
+			\begin{equation}
+				DATAadjust={
+				\left[ \begin{array}{cc}
+				-1 & \frac{1}{3} \\
+				0 & -\frac{-2}{3} \\
+				1 &  \frac{1}{3}
+				\end{array} 
+				\right ]},
+				\end{equation}
+				求解特征协方差矩阵：
+		\\		协方差矩阵:
+		\begin{equation}
+			C={
+			\left[ \begin{array}{cc}
+			cov(x,x)=1 & con(x,y)=0 \\
+			cov(y,x)=0 & cov(y,y)=\frac{1}{3} \\
+			\end{array} 
+			\right ]},
+			\end{equation}
+
+			特征值:1,$\frac{1}{3}$
+
+			特征向量:$(1,0)^T$,$(0,1)^T$
+
+			因此最大的特征值是1,相应的特征矩阵是:$(1,0)^T$
+
+			因此最后的结果:
+			\begin{equation}
+				FinalData=DATAadjust(3\times 2)*(1,0)^T={
+				\left[ \begin{array}{c}
+					-1\\
+					0\\
+					1
+				\end{array} 
+				\right ]},
+				\end{equation}
+		
+	\end{enumerate}
+\end{solution}
+\begin{remark}
+	第一题参考了https://blog.csdn.net/dongyanwen6036/article/details/78311071 
+	
+	PCA:https://zhuanlan.zhihu.com/p/21580949
+
+	https://blog.csdn.net/zhongkelee/article/details/44064401
+\end{remark}
 
 
 
